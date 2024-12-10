@@ -1,0 +1,13 @@
+{
+    "name": "биржа))",
+    "tuples_limit": 500,
+    "structure": {
+    "tables": {
+    "user": ["user_id", "username", "key"],
+    "lot": ["lot_id", "name"],
+    "user_lot": ["user_id", "lot_id", "quantity"],
+    "pair": ["pair_id", "first_lot_id", "second_lot_id"],
+    "order": ["order_id", "user_id", "pair_id", "quantity", "price", "type", "closed"]
+  }
+    }
+}

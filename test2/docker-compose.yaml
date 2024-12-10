@@ -1,0 +1,81 @@
+services:
+  exchange-server:
+    build:
+      context: ./app  # Путь к Dockerfile для биржи
+    environment:
+      - SERVER_NUMBER=1  # Для первой реплики
+    ports:
+      - "8001:8000"
+    deploy:
+      replicas: 1
+    networks:
+      - app-network
+    depends_on:
+      - subd-server
+
+  exchange-server-replica-2:
+    build:
+      context: ./app # Путь к Dockerfile для биржи
+    environment:
+      - SERVER_NUMBER=2  # Для второй реплики
+    ports:
+      - "8002:8000"
+    deploy:
+      replicas: 1
+    networks:
+      - app-network
+    depends_on:
+      - subd-server
+
+  exchange-server-replica-3:
+    build:
+      context: ./app # Путь к Dockerfile для биржи
+    environment:
+      - SERVER_NUMBER=3  # Для третьей реплики
+    ports:
+      - "8003:8000"
+    deploy:
+      replicas: 1
+    networks:
+      - app-network
+    depends_on:
+      - subd-server
+
+  exchange-server-replica-4:
+    build:
+      context: ./app # Путь к Dockerfile для биржи
+    environment:
+      - SERVER_NUMBER=4  # Для четвертой реплики
+    ports:
+      - "8004:8000"
+    deploy:
+      replicas: 1
+    networks:
+      - app-network
+    depends_on:
+      - subd-server
+
+  nginx:
+    build:
+      context: ./nginx  # Используем текущую директорию для поиска Dockerfile для Nginx
+    ports:
+      - "8080:80"  # Публичный порт для HTTP
+    depends_on:
+      - exchange-server
+      - exchange-server-replica-2
+    networks:
+      - app-network
+      
+  subd-server:
+    build:
+      context: ./subd
+      dockerfile: Dockerfile
+    container_name: subd-server
+    ports:
+      - "7432:7432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
